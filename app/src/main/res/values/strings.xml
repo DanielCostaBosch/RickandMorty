@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RickandMorty</string>
+    <string name="character_image">character image</string>
+    <string name="status">Status</string>
+    <string name="species">Species</string>
+    <string name="gender">Gender</string>
+    <string name="type">Type</string>
+</resources>
