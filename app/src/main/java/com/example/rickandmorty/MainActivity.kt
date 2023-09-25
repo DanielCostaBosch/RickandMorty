@@ -124,6 +124,7 @@ class MainActivity : AppCompatActivity() {
 
         // BUSQUEDA PERSONAJE
         binding.searchCharacter.setOnClickListener {
+            binding.tvNameEpiPers.visibility = View.GONE
             isPageSearch = false
             isEpisodeSearch = false
             binding.etSearch.inputType = InputType.TYPE_CLASS_TEXT
@@ -140,6 +141,8 @@ class MainActivity : AppCompatActivity() {
 
         // BUSQUEDA POR EPISODIO
         binding.searchEpisode.setOnClickListener {
+            binding.tvNameEpiPers.visibility = View.VISIBLE
+            binding.tvNameEpiPers.text = getString(R.string.nombre_del_episodio)
             isPageSearch = false
             isEpisodeSearch = true
             binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
@@ -155,6 +158,7 @@ class MainActivity : AppCompatActivity() {
 
         // BUSQUEDA POR PÁGINA (BOTON LISTENER)
         binding.searchPage.setOnClickListener {
+            binding.tvNameEpiPers.visibility = View.GONE
             isPageSearch = true
             isPageSearch = false
             binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
@@ -307,7 +311,7 @@ class MainActivity : AppCompatActivity() {
                 // Recogemos lo que nos interesa
                 // donde estan los datos del personaje
                 try {
-                    var name = result.getString("name")
+                    binding.tvNameEpiPers.text = result.getString("name")
                     var jsonArrPers = result.getJSONArray("characters")
                     for (i in 0 until jsonArrPers.length()) {
                         arrUrlPersonajes.add(jsonArrPers[i].toString())
