@@ -5,4 +5,9 @@
     <string name="species">Species</string>
     <string name="gender">Gender</string>
     <string name="type">Type</string>
+    <string name="fallo_conex_inter">Comprueba la conexión a internet.</string>
+    <string name="introduzca_nombre">Introduzca nombre</string>
+    <string name="introduzca_episodio">Introduzca episodio (1-41)</string>
+    <string name="origin">Origin</string>
+    <string name="introduzca_pagina">Introduzca una página (1-42)</string>
 </resources>

@@ -7,4 +7,8 @@
     </style>
 
     <style name="Theme.RickandMorty" parent="Base.Theme.RickandMorty" />
+    <style name="imageRoundedCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
 </resources>

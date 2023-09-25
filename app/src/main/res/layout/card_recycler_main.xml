@@ -5,10 +5,11 @@
     android:layout_margin="10dp"
     android:background="@drawable/card_background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_card"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        app:shapeAppearanceOverlay="@style/imageRoundedCorners"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:contentDescription="@string/character_image"/>
@@ -18,7 +19,6 @@
         android:layout_height="30dp"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:text="personaje"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/iv_card"
         app:layout_constraintRight_toRightOf="parent"
@@ -78,7 +78,7 @@
         android:layout_width="70dp"
         android:layout_height="20dp"
         android:textSize="12sp"
-        android:text="Origin"
+        android:text="@string/origin"
         android:textColor="@color/main_dark_grey"
         app:layout_constraintTop_toBottomOf="@id/tv_type_label"
         app:layout_constraintLeft_toLeftOf="@id/tv_namecharacter_card"
@@ -122,7 +122,7 @@
     <TextView
         android:id="@+id/tv_type_value"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:textSize="12sp"
         app:layout_constraintTop_toTopOf="@id/tv_type_label"
         app:layout_constraintLeft_toRightOf="@+id/tv_status_label"
@@ -134,7 +134,7 @@
     <TextView
         android:id="@+id/tv_origin_value"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:textSize="12sp"
         app:layout_constraintTop_toTopOf="@id/tv_origin_label"
         app:layout_constraintLeft_toRightOf="@+id/tv_status_label"
