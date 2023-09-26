@@ -2,6 +2,7 @@ package com.example.rickandmorty
 
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
@@ -20,15 +21,18 @@ import com.example.rickandmorty.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.json.JSONException
+import org.json.JSONObject
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var personajesHomeAdapter: PersonajesAdapterMain
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
     private lateinit var context: Context
-    private var url = "https://rickandmortyapi.com/api/";
+    private var url = "https://rickandmortyapi.com/api/"
     private var mRequestQueue: RequestQueue? = null
     private var mRequestQueueEpiChar: RequestQueue? = null
     private var numPage = 1
@@ -37,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     private var isEpisodeSearch = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -254,7 +257,11 @@ class MainActivity : AppCompatActivity() {
                         var location =
                             Location(locationJson.getString("name"), locationJson.getString("url"))
                         var image = jsonObj.getString("image")
-                        var episode = jsonObj.get("episode")
+                        var arrEpisodes = jsonObj.getJSONArray("episode")
+                        var episode = ArrayList<String>()
+                        for (i in 0 until arrEpisodes.length()) {
+                            episode.add(arrEpisodes.getString(i))
+                        }
                         var urlCharacter = jsonObj.getString("url")
                         var created = jsonObj.getString("created")
 
@@ -279,7 +286,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 // si la lista no esta vacía iniciamos recycler
                 if(arrPersonajes.size > 0) {
-                    personajesHomeAdapter = PersonajesAdapterMain(arrPersonajes)
+                    personajesHomeAdapter = PersonajesAdapterMain(arrPersonajes, this@MainActivity)
                     linearLayoutManager = LinearLayoutManager(context)
                     binding.recyclerviewMain.apply {
                         layoutManager = linearLayoutManager
@@ -344,7 +351,11 @@ class MainActivity : AppCompatActivity() {
                             var location =
                                 Location(locationJson.getString("name"), locationJson.getString("url"))
                             var image = resultPers.getString("image")
-                            var episode = resultPers.get("episode")
+                            var arrEpisodes = resultPers.getJSONArray("episode")
+                            var episode = ArrayList<String>()
+                            for (i in 0 until arrEpisodes.length()) {
+                                episode.add(arrEpisodes.getString(i))
+                            }
                             var urlCharacter = resultPers.getString("url")
                             var created = resultPers.getString("created")
 
@@ -368,7 +379,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         // si la lista no esta vacía iniciamos recycler
                         if(arrCharactersEpi.size > 0) {
-                            personajesHomeAdapter = PersonajesAdapterMain(arrCharactersEpi)
+                            personajesHomeAdapter = PersonajesAdapterMain(arrCharactersEpi, this@MainActivity)
                             linearLayoutManager = LinearLayoutManager(context)
                             binding.recyclerviewMain.apply {
                                 layoutManager = linearLayoutManager
@@ -430,7 +441,21 @@ class MainActivity : AppCompatActivity() {
             binding.nextButton.setBackgroundResource(R.color.main_green)
             binding.prevButton.setBackgroundResource(R.color.main_green)
         }
-
         binding.etSearch.setText(numPage.toString())
+    }
+
+    /*
+        Listener click item
+     */
+
+    override fun OnClick(personaje:Personaje) {
+
+        val intent = Intent(context, DetallePersonaje::class.java).apply {
+            putExtra("id", personaje.id)
+        }
+
+
+
+        startActivity(intent)
     }
 }

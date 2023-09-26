@@ -10,12 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.databinding.CardRecyclerMainBinding
+import java.io.Serializable
 import java.util.concurrent.Executors
 
 
-class PersonajesAdapterMain (private val personajes: ArrayList<Personaje>): RecyclerView.Adapter<PersonajesAdapterMain.ViewHolder>() {
+class PersonajesAdapterMain (private val personajes: ArrayList<Personaje>, private val listener: OnClickListener): RecyclerView.Adapter<PersonajesAdapterMain.ViewHolder>() {
 
-    // Create new views (invoked by the layout manager)
+    // Nueva vista layout
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
@@ -23,7 +24,7 @@ class PersonajesAdapterMain (private val personajes: ArrayList<Personaje>): Recy
         return ViewHolder(view)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    // Damos valor a contenido de los items
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         // Get element from your dataset at this position and replace the
@@ -31,8 +32,9 @@ class PersonajesAdapterMain (private val personajes: ArrayList<Personaje>): Recy
         val personaje = personajes[position]
 
         with(holder) {
+            setListener(personaje)
             binding.tvNamecharacterCard.text = personaje.name
-            binding.tvOriginValue.text = personaje.origin.name
+            binding.tvOriginValue.text = personaje.origin!!.name
             binding.tvGenderValue.text = personaje.gender
             binding.tvSpeciesValue.text = personaje.specie
             binding.tvTypeValue.text = personaje.type
@@ -55,10 +57,16 @@ class PersonajesAdapterMain (private val personajes: ArrayList<Personaje>): Recy
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return numero de items
     override fun getItemCount() = personajes.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = CardRecyclerMainBinding.bind(view)
+
+        fun setListener(personaje: Personaje) {
+            binding.root.setOnClickListener{
+                listener.OnClick(personaje)
+            }
+        }
     }
 }

@@ -11,4 +11,8 @@
     <string name="origin">Origin</string>
     <string name="introduzca_pagina">Introduzca una página (1-42)</string>
     <string name="nombre_del_episodio">Nombre del episodio</string>
+    <string name="datos_del_personaje">Datos del personaje</string>
+    <string name="location">Location</string>
+    <string name="apariciones">Apariciones</string>
+    <string name="retroceder">Retroceder</string>
 </resources>
