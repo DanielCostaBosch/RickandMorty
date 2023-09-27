@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +22,7 @@ import com.example.rickandmorty.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.json.JSONException
-import org.json.JSONObject
-
 
 class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var binding: ActivityMainBinding
@@ -39,6 +36,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private var numEpisode = 1
     private var isPageSearch = false
     private var isEpisodeSearch = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,17 +71,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.nextButton.setOnClickListener {
             binding.prevButton.isClickable = true
             binding.prevButton.setBackgroundResource(R.color.main_green)
-            if (isPageSearch) {
-                if (numPage <= 41) {
-                    binding.nextButton.setBackgroundResource(R.color.main_green)
-                    numPage++
-                    var urlextension = "character/?page=$numPage"
-                    getCharacters(urlextension)
-                }else {
-                    binding.nextButton.setBackgroundResource(R.color.main_dark_grey)
-                    binding.nextButton.isClickable = false
-                }
-            }
+
             if (isEpisodeSearch) {
                 if (numEpisode <= 40) {
                     binding.nextButton.setBackgroundResource(R.color.main_green)
@@ -94,17 +82,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                     binding.nextButton.setBackgroundResource(R.color.main_dark_grey)
                     binding.nextButton.isClickable = false
                 }
-            }
-        }
-
-        // ACCION PREV BUTTON, PASA A PAGINA O EPISODIO ANTERIOR
-        binding.nextButton.setOnClickListener {
-            binding.prevButton.isClickable = true
-            binding.prevButton.setBackgroundResource(R.color.main_green)
-            if (isPageSearch) {
-                if (numPage > 1) {
+            } else {
+                if (numPage <= 41) {
                     binding.nextButton.setBackgroundResource(R.color.main_green)
-                    numPage--
+                    numPage++
                     var urlextension = "character/?page=$numPage"
                     getCharacters(urlextension)
                 }else {
@@ -112,21 +93,39 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                     binding.nextButton.isClickable = false
                 }
             }
+        }
+
+        // ACCION PREV BUTTON, PASA A PAGINA O EPISODIO ANTERIOR
+        binding.prevButton.setOnClickListener {
+            binding.prevButton.isClickable = true
+            binding.prevButton.setBackgroundResource(R.color.main_green)
+
             if (isEpisodeSearch) {
                 if (numEpisode > 1) {
-                    binding.nextButton.setBackgroundResource(R.color.main_green)
+                    binding.prevButton.setBackgroundResource(R.color.main_green)
                     numEpisode--
                     var urlextension = "episode/$numEpisode"
                     getEpisodeCharacters(urlextension)
                 }else {
-                    binding.nextButton.setBackgroundResource(R.color.main_dark_grey)
-                    binding.nextButton.isClickable = false
+                    binding.prevButton.setBackgroundResource(R.color.main_dark_grey)
+                    binding.prevButton.isClickable = false
+                }
+            } else {
+                if (numPage > 1) {
+                    binding.prevButton.setBackgroundResource(R.color.main_green)
+                    numPage--
+                    var urlextension = "character/?page=$numPage"
+                    getCharacters(urlextension)
+                }else {
+                    binding.prevButton.setBackgroundResource(R.color.main_dark_grey)
+                    binding.prevButton.isClickable = false
                 }
             }
         }
 
         // BUSQUEDA PERSONAJE
         binding.searchCharacter.setOnClickListener {
+            binding.etSearch.setText("")
             binding.tvNameEpiPers.visibility = View.GONE
             isPageSearch = false
             isEpisodeSearch = false
@@ -144,13 +143,14 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         // BUSQUEDA POR EPISODIO
         binding.searchEpisode.setOnClickListener {
+            binding.etSearch.setText("")
             binding.tvNameEpiPers.visibility = View.VISIBLE
             binding.tvNameEpiPers.text = getString(R.string.nombre_del_episodio)
             isPageSearch = false
             isEpisodeSearch = true
             binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
             binding.containerSearchName.visibility = View.VISIBLE
-            binding.etSearch.setHint(R.string.introduzca_pagina)
+            binding.etSearch.setHint(R.string.introduzca_episodio)
             binding.searchEpisode.setBackgroundResource(R.drawable.bar_bottom_background)
             binding.searchPage.setBackgroundResource(R.color.main_dark_grey)
             binding.searchCharacter.setBackgroundResource(R.color.main_dark_grey)
@@ -161,9 +161,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         // BUSQUEDA POR PÁGINA (BOTON LISTENER)
         binding.searchPage.setOnClickListener {
+            binding.etSearch.setText("")
+
             binding.tvNameEpiPers.visibility = View.GONE
             isPageSearch = true
-            isPageSearch = false
+            isEpisodeSearch = false
             binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
             binding.containerSearchName.visibility = View.VISIBLE
             binding.etSearch.setHint(R.string.introduzca_pagina)
@@ -183,9 +185,13 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             binding.containerSearchName.visibility = View.GONE
             binding.nextButton.visibility = View.VISIBLE
             binding.prevButton.visibility = View.VISIBLE
+            binding.nextButton.setBackgroundResource(R.color.main_green)
             binding.prevButton.setBackgroundResource(R.color.main_dark_grey)
+            binding.nextButton.isClickable = true
+            binding.prevButton.isClickable = false
             binding.searchCharacter.setBackgroundResource(R.color.main_dark_grey)
             binding.searchEpisode.setBackgroundResource(R.color.main_dark_grey)
+            binding.searchPage.setBackgroundResource(R.color.main_dark_grey)
             binding.homeButton.setBackgroundResource(R.drawable.bar_bottom_background)
             var extensionUrl="character/?page=$numPage"
             getCharacters(extensionUrl)
@@ -210,6 +216,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 } else {
                     var extraSearch = binding.etSearch.text
                     var searchUrl = extensionSearch + extraSearch
+                    Log.d("quepasa",searchUrl)
                     getCharacters(searchUrl)
                 }
             }
@@ -408,11 +415,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         numEpisode = binding.etSearch.text.toString().toInt()
         if (numEpisode <= 1) {
             binding.nextButton.setBackgroundResource(R.color.main_green)
+            binding.prevButton.setBackgroundResource(R.color.main_dark_grey)
+            binding.prevButton.isClickable = false
+            binding.nextButton.isClickable = true
             numEpisode = 1
-        } else if (numEpisode > 41) {
+        } else if (numEpisode >= 41) {
             binding.nextButton.setBackgroundResource(R.color.main_dark_grey)
             binding.prevButton.setBackgroundResource(R.color.main_green)
             binding.prevButton.isClickable = true
+            binding.nextButton.isClickable = false
             numEpisode = 41
         } else {
             binding.nextButton.setBackgroundResource(R.color.main_green)
@@ -431,11 +442,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         numPage = binding.etSearch.text.toString().toInt()
         if (numPage <= 1) {
             binding.nextButton.setBackgroundResource(R.color.main_green)
+            binding.prevButton.setBackgroundResource(R.color.main_dark_grey)
+            binding.prevButton.isClickable = false
+            binding.nextButton.isClickable = true
             numPage = 1
-        } else if (numPage > 42) {
+        } else if (numPage >= 42) {
             binding.nextButton.setBackgroundResource(R.color.main_dark_grey)
             binding.prevButton.setBackgroundResource(R.color.main_green)
             binding.prevButton.isClickable = true
+            binding.nextButton.isClickable = false
             numPage = 42
         } else {
             binding.nextButton.setBackgroundResource(R.color.main_green)
@@ -453,9 +468,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         val intent = Intent(context, DetallePersonaje::class.java).apply {
             putExtra("id", personaje.id)
         }
-
-
-
         startActivity(intent)
     }
 }

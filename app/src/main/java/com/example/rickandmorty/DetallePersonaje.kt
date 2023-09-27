@@ -16,12 +16,9 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.rickandmorty.databinding.ActivityDetallePersonajeBinding
-import com.example.rickandmorty.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import org.json.JSONException
 import java.util.concurrent.Executors
 
@@ -42,7 +39,11 @@ class DetallePersonaje : AppCompatActivity() {
         if (intent.extras?.getInt("id") != null) {
            var idPersonaje = intent.extras?.getInt("id")
             getCharDetails(idPersonaje!!)
-            }
+        }
+
+        binding.btnBackDet.setOnClickListener {
+            finish()
+        }
     }
     fun getCharDetails(id: Int) {
         var url = "https://rickandmortyapi.com/api/character/$id";
@@ -139,35 +140,35 @@ class DetallePersonaje : AppCompatActivity() {
         // Corrutina para funcionar en segundo plano
         CoroutineScope(Dispatchers.IO).launch {
 
-                // recogemos los personajes
-                // Request personajes
-                mRequestQueueEpiCharDet = Volley.newRequestQueue(context)
-                // Request cada url
-                for (i in 0 until arrEpi.size) {
-                    // Json Request inicializado
-                    var requestPers = JsonObjectRequest(Request.Method.GET, arrEpi[i], null, { resultPers ->
-                        try {
+            // recogemos los personajes
+            // Request personajes
+            mRequestQueueEpiCharDet = Volley.newRequestQueue(context)
+            // Request cada url
+            for (i in 0 until arrEpi.size) {
+                // Json Request inicializado
+                var requestPers = JsonObjectRequest(Request.Method.GET, arrEpi[i], null, { resultPers ->
+                    try {
 
-                            var nameEpi = resultPers.getString("name")
+                        var nameEpi = resultPers.getString("name")
 
-                            arrListNameEpi.add(nameEpi)
-                        } catch (e:JSONException){
-                            e.printStackTrace()
+                        arrListNameEpi.add(nameEpi)
+                    } catch (e:JSONException){
+                        e.printStackTrace()
+                    }
+                    // si la lista no esta vacía iniciamos recycler
+                    if(arrListNameEpi.size > 0) {
+                        episodiosAdapter = EpisodiosAdapterDetalle(arrListNameEpi)
+                        linearLayoutManager = LinearLayoutManager(context)
+                        binding.recyclerEpisodeDet.apply {
+                            layoutManager = linearLayoutManager
+                            adapter = episodiosAdapter
                         }
-                        // si la lista no esta vacía iniciamos recycler
-                        if(arrListNameEpi.size > 0) {
-                            episodiosAdapter = EpisodiosAdapterDetalle(arrListNameEpi)
-                            linearLayoutManager = LinearLayoutManager(context)
-                            binding.recyclerEpisodeDet.apply {
-                                layoutManager = linearLayoutManager
-                                adapter = episodiosAdapter
-                            }
-                        }
-                    }, {
-                        Toast.makeText(context, "No hay episodios Morty!!",Toast.LENGTH_LONG).show()
-                    })
-                    mRequestQueueEpiCharDet?.add(requestPers)
-                }
+                    }
+                }, {
+                    Toast.makeText(context, "No hay episodios Morty!!",Toast.LENGTH_LONG).show()
+                })
+                mRequestQueueEpiCharDet?.add(requestPers)
+            }
         }
     }
 }

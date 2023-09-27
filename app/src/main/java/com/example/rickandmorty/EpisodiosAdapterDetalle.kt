@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.databinding.CardRecyclerEpisodiosBinding
-import com.example.rickandmorty.databinding.CardRecyclerMainBinding
 
 class EpisodiosAdapterDetalle(private val episodios: ArrayList<String>): RecyclerView.Adapter<EpisodiosAdapterDetalle.ViewHolder>() {
     // Creamos vista layout
