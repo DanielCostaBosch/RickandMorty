@@ -15,4 +15,12 @@
     <string name="location">Location</string>
     <string name="apariciones">Apariciones</string>
     <string name="retroceder">Retroceder</string>
+    <string name="next">Next</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="anterior">Anterior</string>
+    <string name="prev">Prev</string>
+    <string name="buscar_pagina">Buscar página</string>
+    <string name="buscar_episodio">Buscar episodio</string>
+    <string name="buscar_personaje">Buscar personaje</string>
+    <string name="home">Home</string>
 </resources>

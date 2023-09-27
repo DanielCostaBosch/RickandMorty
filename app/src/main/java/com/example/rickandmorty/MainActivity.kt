@@ -8,6 +8,7 @@ import android.net.NetworkInfo
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -145,6 +146,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.searchEpisode.setOnClickListener {
             binding.etSearch.setText("")
             binding.tvNameEpiPers.visibility = View.VISIBLE
+            binding.tvNameEpiPers.gravity = Gravity.CENTER_VERTICAL
             binding.tvNameEpiPers.text = getString(R.string.nombre_del_episodio)
             isPageSearch = false
             isEpisodeSearch = true

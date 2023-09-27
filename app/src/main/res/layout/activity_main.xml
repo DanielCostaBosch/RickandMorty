@@ -23,7 +23,7 @@
     <LinearLayout
         android:id="@+id/containerSearchName"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/titulo"
         android:orientation="vertical"
         android:visibility="gone"
@@ -59,7 +59,6 @@
             android:layout_height="30dp"
             android:background="@color/main_blue"
             android:textColor="@color/black"
-           android:layout_gravity="center_vertical"
             android:textSize="14sp"
             android:textStyle="italic"
             android:visibility="gone"
@@ -68,7 +67,7 @@
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_main"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/containerSearchName"
@@ -91,8 +90,8 @@
         android:id="@+id/prev_button"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:text="Prev"
-        android:contentDescription="Anterior"
+        android:text="@string/prev"
+        android:contentDescription="@string/anterior"
         android:background="@color/main_dark_grey"
         app:layout_constraintRight_toLeftOf="@id/next_button"
         app:layout_constraintBottom_toTopOf="@id/bar_bottom_main"
@@ -101,8 +100,8 @@
     android:id="@+id/next_button"
     android:layout_width="0dp"
     android:layout_height="40dp"
-    android:text="Next"
-    android:contentDescription="Siguiente"
+    android:text="@string/next"
+    android:contentDescription="@string/siguiente"
     app:layout_constraintLeft_toRightOf="@id/prev_button"
     app:layout_constraintBottom_toTopOf="@id/bar_bottom_main"
     app:layout_constraintRight_toRightOf="parent"/>
@@ -123,7 +122,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:background="@drawable/bar_bottom_background"
-            android:contentDescription="Home"
+            android:contentDescription="@string/home"
             android:src="@drawable/ic_home"
             />
         <androidx.appcompat.widget.AppCompatImageButton
@@ -133,7 +132,7 @@
             android:layout_weight="0.25"
             android:background="@color/main_dark_grey"
             android:src="@drawable/ic_person_search"
-            android:contentDescription="Buscar personaje"/>
+            android:contentDescription="@string/buscar_personaje"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/search_episode"
             android:layout_width="0dp"
@@ -141,7 +140,7 @@
             android:layout_weight="0.25"
             android:background="@color/main_dark_grey"
             android:src="@drawable/ic_episode_search"
-            android:contentDescription="Buscar episodio"/>
+            android:contentDescription="@string/buscar_episodio"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/search_page"
             android:layout_width="0dp"
@@ -149,7 +148,7 @@
             android:layout_weight="0.25"
             android:background="@color/main_dark_grey"
             android:src="@drawable/ic_find_page"
-            android:contentDescription="Buscar página"/>
+            android:contentDescription="@string/buscar_pagina"/>
 
     </LinearLayout>
 
