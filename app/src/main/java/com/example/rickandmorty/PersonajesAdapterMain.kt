@@ -37,7 +37,7 @@ class PersonajesAdapterMain (private val personajes: ArrayList<Personaje>, priva
             binding.tvSpeciesValue.text = personaje.specie
             binding.tvTypeValue.text = personaje.type
             binding.tvStatusValue.text = personaje.status
-
+            // añadimos imagen si es posible
             val executor = Executors.newSingleThreadExecutor()
             val handler = android.os.Handler(Looper.getMainLooper())
             var imageBm : Bitmap? = null

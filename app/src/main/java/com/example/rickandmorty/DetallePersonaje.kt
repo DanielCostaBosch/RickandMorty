@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -104,10 +103,12 @@ class DetallePersonaje : AppCompatActivity() {
             mRequestQueue?.add(request)
         }
     }
+    // Funcion para dar valores a la vista
     fun anadir_valores (personaje: Personaje) {
         val executor = Executors.newSingleThreadExecutor()
         val handler = android.os.Handler(Looper.getMainLooper())
         var imageBm : Bitmap? = null
+        // corrutina para la imagen
         executor.execute {
             try {
                 val `in` = java.net.URL(personaje.image).openStream()
@@ -126,6 +127,8 @@ class DetallePersonaje : AppCompatActivity() {
             binding.tvValueGenderDet.text = personaje.gender
             binding.tvValueOriginDet.text = personaje.origin.name
             binding.tvValueStatusDet.text = personaje.status
+
+            // Depende del estado un outline
             when(personaje.status) {
                 "Alive" -> binding.containerIvPersonDet.setBackgroundResource(R.drawable.outline_det_alive)
                 "Dead" -> binding.containerIvPersonDet.setBackgroundResource(R.drawable.outline_det_dead)
@@ -134,23 +137,26 @@ class DetallePersonaje : AppCompatActivity() {
 
         }
     }
+
+    /*
+        Funcion para alimentar el recylerview de los episodios
+        en los que aparece el personaje
+     */
     fun anadir_recyclerEpi(arrEpi:ArrayList<String>){
         // Array recoge personajes del episodio
         var arrListNameEpi = ArrayList <String> ()
         // Corrutina para funcionar en segundo plano
         CoroutineScope(Dispatchers.IO).launch {
 
-            // recogemos los personajes
-            // Request personajes
+            // Request episodios
             mRequestQueueEpiCharDet = Volley.newRequestQueue(context)
             // Request cada url
             for (i in 0 until arrEpi.size) {
                 // Json Request inicializado
                 var requestPers = JsonObjectRequest(Request.Method.GET, arrEpi[i], null, { resultPers ->
                     try {
-
+                        // nombre episodio
                         var nameEpi = resultPers.getString("name")
-
                         arrListNameEpi.add(nameEpi)
                     } catch (e:JSONException){
                         e.printStackTrace()
